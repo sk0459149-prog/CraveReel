@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cooking Assistant Mode – CraveReel</title>
+  <!-- Bootstrap 5 & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      background: #060911;
+      color: #fff;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .cook-header {
+      background: rgba(15, 23, 42, 0.95);
+      border-bottom: 1px solid var(--border-color);
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .cook-progress {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      width: 100%;
+    }
+    .cook-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #f59e0b);
+      transition: width 0.3s ease;
+    }
+    .cook-stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 20px;
+      max-width: 900px;
+      margin: 0 auto;
+      width: 100%;
+      text-align: center;
+    }
+    .step-counter-badge {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid var(--accent-primary);
+      color: var(--accent-primary);
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: var(--radius-full);
+      margin-bottom: 24px;
+      display: inline-block;
+    }
+    .step-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .step-instruction {
+      font-size: 1.45rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+      font-weight: 500;
+      margin-bottom: 30px;
+      max-width: 780px;
+    }
+    /* Digital Kitchen Timer */
+    .cook-timer-card {
+      background: #0f172a;
+      border: 2px solid rgba(245, 158, 11, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 20px 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .timer-digits {
+      font-family: monospace;
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--accent-primary);
+      letter-spacing: 3px;
+      line-height: 1;
+    }
+    .cook-footer {
+      background: rgba(15, 23, 42, 0.95);
+      border-top: 1px solid var(--border-color);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      bottom: 0;
+      z-index: 100;
+    }
+    /* Drawer */
+    .ingredients-offcanvas {
+      background: #0f172a !important;
+      color: #fff !important;
+      border-left: 1px solid var(--border-color);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <header class="cook-header">
+    <div class="d-flex align-items-center gap-3">
+      <a href="#" id="exitCookingBtn" class="btn btn-sm btn-outline-secondary rounded-circle" title="Exit Cooking Mode">
+        <i class="bi bi-x-lg text-white"></i>
+      </a>
+      <div>
+        <div class="fw-bold text-white fs-6" id="cookRecipeTitle">Recipe Name</div>
+        <div class="small text-muted" id="cookRecipeChef">Chef Name</div>
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center gap-2">
+      <button class="btn btn-sm btn-rr-secondary" data-bs-toggle="offcanvas" data-bs-target="#ingredientsDrawer">
+        <i class="bi bi-basket2 text-warning me-1"></i> Ingredients
+      </button>
+    </div>
+  </header>
+
+  <!-- Progress Bar -->
+  <div class="cook-progress">
+    <div class="cook-progress-bar" id="cookProgressBar" style="width: 0%;"></div>
+  </div>
+
+  <!-- Main Step Center Stage -->
+  <main class="cook-stage">
+    <div id="cookLoading" class="py-5 text-center">
+      <div class="spinner-border text-warning" role="status"></div>
+      <div class="mt-2 text-muted">Preparing cooking mode...</div>
+    </div>
+
+    <div id="cookStepContainer" class="d-none w-100">
+      <div class="step-counter-badge" id="stepBadge">STEP 1 OF 5</div>
+      <h2 class="step-title" id="stepTitle">Boil the Pasta</h2>
+      <p class="step-instruction" id="stepInstruction">Bring heavily salted water to a rolling boil and cook fettuccine al dente.</p>
+
+      <!-- Chef Tip Box -->
+      <div id="stepTipBox" class="d-none alert alert-warning bg-opacity-10 border-warning border-opacity-25 text-warning mx-auto mb-4 py-2 px-3 small rounded-3" style="max-width: 600px;">
+        <i class="bi bi-lightbulb-fill me-1"></i> <span id="stepTipText">Chef's tip</span>
+      </div>
+
+      <!-- Integrated Kitchen Timer -->
+      <div class="cook-timer-card mx-auto" id="timerBox">
+        <div class="small text-muted fw-semibold text-uppercase tracking-wider">
+          <i class="bi bi-stopwatch text-warning me-1"></i> Kitchen Step Timer
+        </div>
+        <div class="timer-digits" id="timerDisplay">00:00</div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm btn-success px-3" id="timerStartBtn" onclick="toggleTimer()">
+            <i class="bi bi-play-fill"></i> Start
+          </button>
+          <button class="btn btn-sm btn-outline-secondary px-3" onclick="resetTimer()">
+            <i class="bi bi-arrow-counterclockwise"></i> Reset
+          </button>
+          <button class="btn btn-sm btn-outline-warning" onclick="addTimerMinute(1)">+1 min</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Celebration Screen (When finished) -->
+    <div id="cookCelebration" class="d-none text-center py-4">
+      <div class="display-1 mb-3">🎉 🍳 🥂</div>
+      <h2 class="display-5 fw-extrabold text-white mb-2">Bon Appétit!</h2>
+      <p class="lead text-secondary mb-4">You have successfully prepared this recipe. Time to plate and enjoy your delicious creation!</p>
+      <div class="d-flex justify-content-center gap-3">
+        <a href="#" id="rateFromCookBtn" class="btn btn-rr-primary btn-lg">
+          <i class="bi bi-star-fill text-warning"></i> Rate &amp; Review
+        </a>
+        <a href="index.html" class="btn btn-rr-secondary btn-lg">
+          <i class="bi bi-house-door"></i> Back Home
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom Navigation Bar -->
+  <footer class="cook-footer">
+    <button class="btn btn-rr-secondary" id="prevStepBtn" onclick="prevStep()" disabled>
+      <i class="bi bi-arrow-left"></i> Previous Step
+    </button>
+
+    <div class="text-secondary small d-none d-md-block">
+      Use <kbd class="bg-dark text-warning">←</kbd> and <kbd class="bg-dark text-warning">→</kbd> arrow keys to navigate
+    </div>
+
+    <button class="btn btn-cook-this" id="nextStepBtn" onclick="nextStep()">
+      Next Step <i class="bi bi-arrow-right"></i>
+    </button>
+  </footer>
+
+  <!-- Ingredients Drawer (Offcanvas) -->
+  <div class="offcanvas offcanvas-end ingredients-offcanvas" tabindex="-1" id="ingredientsDrawer">
+    <div class="offcanvas-header border-bottom border-secondary border-opacity-10">
+      <h5 class="offcanvas-title text-white fw-bold"><i class="bi bi-basket2 text-warning me-2"></i> Ingredients Checklist</h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+      <p class="small text-secondary mb-3">Keep track of your measured ingredients while you cook:</p>
+      <ul class="list-group list-group-flush" id="cookDrawerIngredientsList">
+        <!-- Injected via cook.js -->
+      </ul>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- App Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cook.js"></script>
+</body>
+</html>

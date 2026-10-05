@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipe Details – CraveReel</title>
+  <!-- Bootstrap 5 & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <nav class="navbar navbar-expand-lg rr-navbar">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <div class="brand-icon"><i class="bi bi-play-circle-fill"></i></div>
+        <span>Crave<span class="brand-accent">Reel</span></span>
+      </a>
+
+      <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+        <i class="bi bi-list fs-2"></i>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 gap-1">
+          <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-door"></i> Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="explore.html"><i class="bi bi-compass"></i> Explore</a></li>
+          <li class="nav-item"><a class="nav-link reels-badge-link" href="reels.html"><i class="bi bi-camera-reels-fill"></i> Reels</a></li>
+          <li class="nav-item"><a class="nav-link" href="saved.html"><i class="bi bi-bookmark-heart"></i> Saved</a></li>
+        </ul>
+
+        <!-- Auth Section -->
+        <div id="auth-nav-section" class="d-flex align-items-center"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Recipe Hero Banner -->
+  <div id="recipeLoadingSpinner" class="text-center py-5">
+    <div class="spinner-border text-warning" role="status"></div>
+    <div class="text-secondary small mt-2">Loading recipe details...</div>
+  </div>
+
+  <main id="recipeContent" class="d-none">
+    <!-- Breadcrumb & Top Actions -->
+    <div class="container pt-4 pb-2">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0 small">
+            <li class="breadcrumb-item"><a href="index.html" class="text-muted">Home</a></li>
+            <li class="breadcrumb-item"><a href="explore.html" class="text-muted">Recipes</a></li>
+            <li class="breadcrumb-item active text-warning" id="breadcrumbCategory">Category</li>
+          </ol>
+        </nav>
+
+        <div class="d-flex align-items-center gap-2">
+          <button id="recipeLikeBtn" class="btn btn-sm btn-rr-secondary" onclick="toggleRecipeLike()">
+            <i class="bi bi-heart" id="recipeLikeIcon"></i> <span id="recipeLikeCount">0</span>
+          </button>
+          <button id="recipeSaveBtn" class="btn btn-sm btn-rr-secondary" onclick="toggleRecipeSave()">
+            <i class="bi bi-bookmark" id="recipeSaveIcon"></i> <span>Save Recipe</span>
+          </button>
+          <button class="btn btn-sm btn-rr-secondary" onclick="shareRecipe()">
+            <i class="bi bi-share"></i> Share
+          </button>
+          <button class="btn btn-sm btn-outline-secondary" onclick="window.print()">
+            <i class="bi bi-printer"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Title & Contributor -->
+    <div class="container py-3">
+      <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+        <span class="badge bg-warning bg-opacity-20 text-warning px-3 py-1 rounded-pill" id="recipeCategoryBadge">Category</span>
+        <span id="recipeDietBadge"></span>
+        <span class="badge bg-secondary bg-opacity-20 text-secondary px-3 py-1 rounded-pill" id="recipeDifficultyBadge">Easy</span>
+      </div>
+
+      <h1 class="display-5 fw-extrabold text-white mb-3" id="recipeTitle">Recipe Title</h1>
+      <p class="lead text-secondary mb-4" id="recipeDesc">Recipe Description</p>
+
+      <!-- Contributor Bar -->
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 p-3 rounded-4" style="background: var(--bg-card); border: 1px solid var(--border-color);">
+        <div class="d-flex align-items-center gap-3">
+          <img id="recipeAuthorAvatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-primary);">
+          <div>
+            <div class="fw-bold text-white fs-6" id="recipeAuthorName">Chef Name</div>
+            <div class="small text-muted" id="recipeDate">Published on Sep 2026</div>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-4 text-center">
+          <div>
+            <div class="small text-muted">Prep Time</div>
+            <div class="fw-bold text-white fs-6" id="recipePrepTime">15 mins</div>
+          </div>
+          <div class="vr bg-secondary opacity-25"></div>
+          <div>
+            <div class="small text-muted">Cook Time</div>
+            <div class="fw-bold text-white fs-6" id="recipeCookTime">25 mins</div>
+          </div>
+          <div class="vr bg-secondary opacity-25"></div>
+          <div>
+            <div class="small text-muted">Servings</div>
+            <div class="fw-bold text-white fs-6" id="recipeServings">4 Servings</div>
+          </div>
+          <div class="vr bg-secondary opacity-25"></div>
+          <div>
+            <div class="small text-muted">Rating</div>
+            <div class="fw-bold text-warning fs-6">
+              <span id="recipeRatingNum">4.8</span> ★
+              <span class="text-muted small" id="recipeRatingCount">(12)</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <a href="#" id="startCookingBtn" class="btn btn-cook-this btn-lg px-4">
+            <i class="bi bi-play-circle-fill fs-5"></i> Start Cooking Mode
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Media & Ingredients Row -->
+    <div class="container py-4">
+      <div class="row g-4">
+        <!-- Media Column: Recipe Reel or Photo -->
+        <div class="col-lg-7">
+          <div class="rr-dashboard-card p-0 overflow-hidden position-relative" style="border-radius: var(--radius-lg);">
+            <!-- Watch Recipe Reel Container -->
+            <div id="reelPlayerContainer" class="position-relative d-none" style="background: #000; max-height: 520px; text-align: center;">
+              <video id="recipeDetailVideo" controls style="max-height: 520px; width: 100%; object-fit: contain;" playsinline></video>
+              <div class="position-absolute top-0 start-0 m-3 badge bg-warning text-dark fw-bold px-3 py-1">
+                <i class="bi bi-camera-reels-fill me-1"></i> Watch Recipe Reel
+              </div>
+            </div>
+
+            <!-- Standard Image Container -->
+            <div id="recipeImageContainer" class="position-relative">
+              <img id="recipeMainImage" src="" alt="Recipe Image" class="w-100" style="max-height: 480px; object-fit: cover;">
+            </div>
+          </div>
+
+          <!-- Reel Toggle Pill if reel exists -->
+          <div id="reelToggleBar" class="d-none mt-2 d-flex justify-content-between align-items-center p-2 px-3 rounded-pill" style="background: var(--bg-card); border: 1px solid var(--border-color);">
+            <span class="small text-secondary"><i class="bi bi-camera-reels text-warning me-1"></i> Dish-specific recipe video available</span>
+            <button class="btn btn-sm btn-outline-warning" id="switchMediaBtn" onclick="toggleMediaView()">
+              <i class="bi bi-play-fill"></i> Play Reel Video
+            </button>
+          </div>
+        </div>
+
+        <!-- Ingredients Checklist Column -->
+        <div class="col-lg-5">
+          <div class="rr-dashboard-card h-100 d-flex flex-direction-column">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="fw-bold text-white mb-0">
+                <i class="bi bi-basket2-fill text-warning me-2"></i> Ingredients
+              </h5>
+              <span class="badge bg-secondary bg-opacity-25 text-white" id="ingredientsHeaderCount">0 Items</span>
+            </div>
+            <p class="text-secondary small mb-3">Tap any ingredient to tick it off your pantry checklist:</p>
+
+            <ul class="list-group list-group-flush flex-grow-1" id="recipeIngredientsList">
+              <!-- Dynamically populated checklist -->
+            </ul>
+
+            <div class="mt-4 pt-3 border-top" style="border-color: var(--border-color) !important;">
+              <a href="#" id="startCookingBtn2" class="btn btn-cook-this w-100 justify-content-center py-2 fs-6">
+                🍳 Ready? Launch Cooking Assistant
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step-by-Step Instructions -->
+    <div class="container py-4">
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <div class="rr-dashboard-card mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <div>
+                <h4 class="fw-bold text-white mb-1"><i class="bi bi-list-ol text-warning me-2"></i> Step-by-Step Instructions</h4>
+                <p class="text-secondary small mb-0">Follow along sequentially or use Cooking Mode for automated timers.</p>
+              </div>
+              <a href="#" id="startCookingBtn3" class="btn btn-sm btn-rr-primary">
+                <i class="bi bi-stopwatch"></i> Cooking Mode
+              </a>
+            </div>
+
+            <div class="d-flex flex-column gap-3" id="recipeStepsList">
+              <!-- Dynamically populated steps -->
+            </div>
+          </div>
+
+          <!-- Ratings & Reviews Section -->
+          <div class="rr-dashboard-card mb-4">
+            <h4 class="fw-bold text-white mb-3"><i class="bi bi-star-fill text-warning me-2"></i> Rate &amp; Review This Recipe</h4>
+
+            <!-- Interactive Star Rating Form -->
+            <form id="ratingForm" onsubmit="handleRatingSubmit(event)" class="p-3 rounded-4 mb-4" style="background: rgba(0, 0, 0, 0.25); border: 1px solid var(--border-color);">
+              <div class="mb-3">
+                <label class="form-label d-block">Your Rating</label>
+                <div class="d-inline-flex gap-2 fs-3 text-secondary" id="starPicker">
+                  <i class="bi bi-star star-rate" data-score="1" onclick="setRatingScore(1)"></i>
+                  <i class="bi bi-star star-rate" data-score="2" onclick="setRatingScore(2)"></i>
+                  <i class="bi bi-star star-rate" data-score="3" onclick="setRatingScore(3)"></i>
+                  <i class="bi bi-star star-rate" data-score="4" onclick="setRatingScore(4)"></i>
+                  <i class="bi bi-star star-rate" data-score="5" onclick="setRatingScore(5)"></i>
+                </div>
+                <input type="hidden" id="selectedStarScore" value="0">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="reviewTextInput">Write a Review (Optional)</label>
+                <textarea id="reviewTextInput" class="form-control" rows="2" placeholder="Tell the chef how it tasted, any substitutes you tried, or tips for others..."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-rr-primary">
+                <i class="bi bi-send-fill"></i> Submit Rating &amp; Review
+              </button>
+            </form>
+
+            <!-- Reviews Feed -->
+            <h6 class="fw-bold text-white mb-3">Community Reviews (<span id="reviewsCount">0</span>)</h6>
+            <div id="recipeReviewsList" class="d-flex flex-column gap-3">
+              <!-- Dynamically Populated -->
+            </div>
+          </div>
+
+          <!-- Questions & Comments Section -->
+          <div class="rr-dashboard-card">
+            <h4 class="fw-bold text-white mb-3"><i class="bi bi-chat-dots-fill text-warning me-2"></i> Questions &amp; Comments</h4>
+
+            <form id="commentForm" onsubmit="handleCommentSubmit(event)" class="mb-4">
+              <div class="input-group">
+                <input type="text" id="recipeCommentInput" class="form-control" placeholder="Ask a question or leave a tip for other cooks..." required>
+                <button class="btn btn-rr-primary" type="submit">Post Comment</button>
+              </div>
+            </form>
+
+            <div id="recipeCommentsList" class="d-flex flex-column gap-3">
+              <!-- Dynamically Populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Chef Info & Related Recipes -->
+        <div class="col-lg-4">
+          <!-- Chef Card -->
+          <div class="rr-dashboard-card mb-4 text-center">
+            <img id="chefCardAvatar" src="" class="rounded-circle mb-3 shadow" style="width: 80px; height: 80px; object-fit: cover; border: 3px solid var(--accent-primary);">
+            <h5 class="fw-bold text-white mb-1" id="chefCardName">Chef Name</h5>
+            <p class="text-secondary small mb-3" id="chefCardBio">Passionate culinary contributor.</p>
+            <button class="btn btn-sm btn-rr-secondary w-100" onclick="openDirectMessageModal()">
+              <i class="bi bi-envelope"></i> Message Contributor
+            </button>
+          </div>
+
+          <!-- Recommended / Related Recipes -->
+          <div class="rr-dashboard-card">
+            <h6 class="fw-bold text-white mb-3"><i class="bi bi-magic text-warning me-1"></i> You Might Also Like</h6>
+            <div id="relatedRecipesList" class="d-flex flex-column gap-3">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Direct Message Modal -->
+  <div class="modal fade" id="dmModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background: var(--bg-card); border-color: var(--border-color);">
+        <div class="modal-header border-bottom border-secondary border-opacity-10">
+          <h5 class="modal-title text-white"><i class="bi bi-envelope-fill text-warning me-2"></i> Send Message to Chef</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <form onsubmit="handleSendDM(event)">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Subject</label>
+              <input type="text" id="dmSubject" class="form-control" placeholder="e.g. Cooking time clarification" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Message</label>
+              <textarea id="dmContent" class="form-control" rows="4" placeholder="Write your message here..." required></textarea>
+            </div>
+          </div>
+          <div class="modal-footer border-top border-secondary border-opacity-10">
+            <button type="button" class="btn btn-rr-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-rr-primary">Send Message</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- Mobile Bottom Navigation -->
+  <div class="mobile-bottom-nav">
+    <a href="index.html" class="mobile-nav-item"><i class="bi bi-house-door-fill"></i><span>Home</span></a>
+    <a href="explore.html" class="mobile-nav-item"><i class="bi bi-compass"></i><span>Explore</span></a>
+    <a href="reels.html" class="mobile-nav-item text-warning"><i class="bi bi-camera-reels-fill"></i><span>Reels</span></a>
+    <a href="saved.html" class="mobile-nav-item"><i class="bi bi-bookmark-heart"></i><span>Saved</span></a>
+    <a href="login.html" class="mobile-nav-item"><i class="bi bi-person-circle"></i><span>Profile</span></a>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- App Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/recipe.js"></script>
+</body>
+</html>

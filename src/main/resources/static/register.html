@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register – CraveReel</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body { background: var(--bg-primary); display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 1.5rem 0; }
+    .auth-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 460px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    }
+    .auth-logo { text-align: center; margin-bottom: 1.5rem; }
+    .auth-logo a { font-size: 1.6rem; font-weight: 800; color: var(--primary); text-decoration: none; }
+    .auth-logo span { color: var(--text-primary); }
+    .auth-title { font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem; text-align: center; }
+    .auth-subtitle { color: var(--text-muted); font-size: 0.9rem; text-align: center; margin-bottom: 1.75rem; }
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.4rem; }
+    .form-group input {
+      width: 100%; padding: 0.7rem 1rem; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--bg-secondary);
+      color: var(--text-primary); font-size: 0.95rem; outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    .form-group input:focus { border-color: var(--primary); }
+    .role-selector { display: flex; gap: 1rem; }
+    .role-option { flex: 1; }
+    .role-option input[type="radio"] { display: none; }
+    .role-option label {
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+      padding: 0.9rem; border: 2px solid var(--border); border-radius: 10px;
+      cursor: pointer; transition: all 0.2s; text-align: center;
+      color: var(--text-secondary); font-size: 0.85rem;
+    }
+    .role-option label .role-icon { font-size: 1.6rem; }
+    .role-option label .role-name { font-weight: 700; color: var(--text-primary); }
+    .role-option label .role-desc { font-size: 0.75rem; color: var(--text-muted); }
+    .role-option input:checked + label { border-color: var(--primary); background: rgba(255,107,0,0.08); }
+    .btn-auth {
+      width: 100%; padding: 0.8rem; border: none; border-radius: 8px;
+      background: var(--primary); color: #fff; font-size: 1rem;
+      font-weight: 700; cursor: pointer; margin-top: 0.5rem;
+      transition: background 0.2s;
+    }
+    .btn-auth:hover { background: var(--primary-dark, #e05c00); }
+    .btn-auth:disabled { opacity: 0.6; cursor: not-allowed; }
+    .auth-footer { text-align: center; margin-top: 1.25rem; font-size: 0.9rem; color: var(--text-muted); }
+    .auth-footer a { color: var(--primary); font-weight: 600; text-decoration: none; }
+    .error-msg { background: rgba(220,53,69,0.12); border: 1px solid rgba(220,53,69,0.4); color: #ff6b7a; border-radius: 8px; padding: 0.6rem 1rem; font-size: 0.87rem; margin-bottom: 1rem; display: none; }
+    .pass-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; }
+  </style>
+</head>
+<body>
+  <div class="auth-card">
+    <div class="auth-logo">
+      <a href="index.html">🍳 Crave<span>Reel</span></a>
+    </div>
+    <h1 class="auth-title">Join CraveReel</h1>
+    <p class="auth-subtitle">Discover, cook, and share amazing recipes</p>
+
+    <div class="error-msg" id="errorMsg"></div>
+
+    <form id="registerForm">
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" placeholder="Gordon Ramsay" required autocomplete="name" />
+      </div>
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" id="email" placeholder="you@example.com" required autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Min 6 characters" required autocomplete="new-password" />
+        <p class="pass-hint">Use at least 6 characters with a mix of letters and numbers.</p>
+      </div>
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" placeholder="Repeat your password" required autocomplete="new-password" />
+      </div>
+
+      <div class="form-group">
+        <label>I want to…</label>
+        <div class="role-selector">
+          <div class="role-option">
+            <input type="radio" name="role" id="roleExplorer" value="EXPLORER" checked />
+            <label for="roleExplorer">
+              <span class="role-icon">🧑‍🍽️</span>
+              <span class="role-name">Explorer</span>
+              <span class="role-desc">Browse, rate & save recipes</span>
+            </label>
+          </div>
+          <div class="role-option">
+            <input type="radio" name="role" id="roleContributor" value="CONTRIBUTOR" />
+            <label for="roleContributor">
+              <span class="role-icon">👨‍🍳</span>
+              <span class="role-name">Chef / Creator</span>
+              <span class="role-desc">Share my own recipes & reels</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-auth" id="registerBtn">Create Account</button>
+    </form>
+
+    <div class="auth-footer">
+      Already have an account? <a href="login.html">Sign in →</a>
+    </div>
+    <div class="auth-footer" style="margin-top:0.5rem;">
+      <a href="index.html">← Back to home</a>
+    </div>
+  </div>
+
+  <div id="toastContainer" style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;display:flex;flex-direction:column;gap:0.5rem;"></div>
+
+  <script src="js/api.js"></script>
+  <script>
+    // Redirect if already logged in
+    if (localStorage.getItem('rr_token')) {
+      const u = JSON.parse(localStorage.getItem('rr_user') || '{}');
+      redirectByRole(u.role);
+    }
+
+    function redirectByRole(role) {
+      if (role === 'ROLE_ADMIN') window.location.href = 'admin-dashboard.html';
+      else if (role === 'ROLE_CONTRIBUTOR') window.location.href = 'contributor-dashboard.html';
+      else window.location.href = 'explorer-dashboard.html';
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('errorMsg');
+      el.textContent = msg;
+      el.style.display = 'block';
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('registerBtn');
+      const errorEl = document.getElementById('errorMsg');
+      errorEl.style.display = 'none';
+
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const role = document.querySelector('input[name="role"]:checked').value;
+
+      if (password !== confirmPassword) {
+        showError('Passwords do not match.');
+        return;
+      }
+      if (password.length < 6) {
+        showError('Password must be at least 6 characters.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Creating account…';
+
+      try {
+        const data = await apiFetch('/auth/register', {
+    method: 'POST',
+    body: JSON.stringify({
+        name: fullName,
+        email,
+        password,
+        confirmPassword,
+        role
+    })
+});
+
+        const result = data.data ?? data;
+
+if (result.token) {
+    localStorage.setItem('rr_token', result.token);
+    localStorage.setItem('rr_user', JSON.stringify(result.user || {}));
+    showToast('Account created! Welcome to CraveReel 🎉', 'success');
+    setTimeout(() => redirectByRole(result.user?.role), 1000);
+
+        } else {
+          showError(data.message || 'Registration failed. Please try again.');
+          btn.disabled = false;
+          btn.textContent = 'Create Account';
+        }
+      } catch (err) {
+        showError(err.message || 'Registration failed. Please try again.');
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+      }
+    });
+  </script>
+</body>
+</html>

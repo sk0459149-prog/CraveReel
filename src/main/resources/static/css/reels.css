@@ -1,0 +1,310 @@
+/* ==========================================================================
+   CraveReel - Dedicated 9:16 Short-Video Feed Styling
+   ========================================================================== */
+
+.reels-page-wrapper {
+  height: calc(100vh - 65px);
+  overflow: hidden;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.reels-layout-container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 24px;
+  padding: 16px 0;
+  justify-content: center;
+}
+
+/* Feed Viewport */
+.reels-feed {
+  height: 100%;
+  width: 100%;
+  max-width: 440px;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  position: relative;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.reels-feed::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* Individual Reel Card */
+.reel-item {
+  height: 100%;
+  width: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  position: relative;
+  background: #0a0f1d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  user-select: none;
+}
+
+.reel-item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+/* Video Overlay Controls & Information */
+.reel-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 16px 24px 16px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.45) 0%,
+    transparent 20%,
+    transparent 60%,
+    rgba(0, 0, 0, 0.88) 100%
+  );
+}
+
+.reel-overlay-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.reel-audio-toggle {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.2s ease;
+}
+
+.reel-audio-toggle:hover {
+  background: rgba(245, 158, 11, 0.8);
+  transform: scale(1.1);
+}
+
+/* Right Floating Action Rail */
+.reel-action-rail {
+  position: absolute;
+  right: 14px;
+  bottom: 95px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  pointer-events: auto;
+  z-index: 10;
+}
+
+.reel-action-btn {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  font-size: 1.25rem;
+}
+
+.reel-action-btn:hover {
+  transform: scale(1.12);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.reel-action-btn.liked {
+  color: var(--accent-rose);
+  background: rgba(244, 63, 94, 0.2);
+  border-color: rgba(244, 63, 94, 0.4);
+}
+
+.reel-action-btn.saved {
+  color: var(--accent-primary);
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.reel-action-count {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  margin-top: 3px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+/* Bottom Overlay Details */
+.reel-overlay-bottom {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 60px; /* Space for action rail */
+}
+
+.reel-creator-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reel-creator-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent-primary);
+}
+
+.reel-creator-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.reel-recipe-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.3;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+}
+
+.reel-recipe-desc {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.85);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.reel-cta-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+/* Progress Scrub Bar */
+.reel-progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  z-index: 20;
+}
+
+.reel-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+  transition: width 0.1s linear;
+}
+
+/* Desktop Side Panel */
+.reels-side-panel {
+  flex: 1;
+  max-width: 440px;
+  height: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+@media (max-width: 992px) {
+  .reels-side-panel {
+    display: none;
+  }
+  .reels-feed {
+    max-width: 100%;
+    border-radius: 0;
+  }
+}
+
+/* Comment Drawer / Sheet */
+.reel-comment-drawer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70%;
+  background: #111827;
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.7);
+}
+
+.reel-comment-drawer.open {
+  transform: translateY(0);
+}
+
+.comment-drawer-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+}
+
+.comment-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.comment-drawer-footer {
+  padding: 14px 20px;
+  border-top: 1px solid var(--border-color);
+  background: #0b0f19;
+}

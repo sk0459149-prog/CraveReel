@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login – CraveReel</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body { background: var(--bg-primary); display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+    .auth-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem 2rem; width: 100%; max-width: 420px; box-shadow: 0 8px 40px rgba(0,0,0,0.4); }
+    .auth-logo { text-align: center; margin-bottom: 1.5rem; }
+    .auth-logo a { font-size: 1.6rem; font-weight: 800; color: var(--primary); text-decoration: none; }
+    .auth-logo span { color: var(--text-primary); }
+    .auth-title { font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem; text-align: center; }
+    .auth-subtitle { color: var(--text-muted); font-size: 0.9rem; text-align: center; margin-bottom: 1.75rem; }
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.4rem; }
+    .form-group input { width: 100%; padding: 0.7rem 1rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-secondary); color: var(--text-primary); font-size: 0.95rem; outline: none; transition: border-color 0.2s; box-sizing: border-box; }
+    .form-group input:focus { border-color: var(--primary); }
+    .btn-auth { width: 100%; padding: 0.8rem; border: none; border-radius: 8px; background: var(--primary); color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 0.5rem; transition: background 0.2s; }
+    .btn-auth:hover { background: var(--primary-dark, #e05c00); }
+    .btn-auth:disabled { opacity: 0.6; cursor: not-allowed; }
+    .auth-footer { text-align: center; margin-top: 1.25rem; font-size: 0.9rem; color: var(--text-muted); }
+    .auth-footer a { color: var(--primary); font-weight: 600; text-decoration: none; }
+    .error-msg { background: rgba(220,53,69,0.12); border: 1px solid rgba(220,53,69,0.4); color: #ff6b7a; border-radius: 8px; padding: 0.6rem 1rem; font-size: 0.87rem; margin-bottom: 1rem; display: none; }
+    .demo-creds { background: rgba(255,107,0,0.08); border: 1px solid rgba(255,107,0,0.2); border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-size: 0.82rem; color: var(--text-muted); }
+    .demo-creds strong { color: var(--primary); }
+    .demo-creds .cred-row { display: flex; justify-content: space-between; gap: 0.5rem; margin-top: 0.3rem; }
+    .demo-btn { background: none; border: 1px solid var(--border); border-radius: 5px; padding: 0.2rem 0.5rem; font-size: 0.78rem; color: var(--text-secondary); cursor: pointer; }
+    .demo-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .divider { display: flex; align-items: center; gap: 0.75rem; margin: 1rem 0; }
+    .divider hr { flex: 1; border: none; border-top: 1px solid var(--border); }
+    .divider span { color: var(--text-muted); font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <div class="auth-card">
+    <div class="auth-logo"><a href="index.html">🍳 Crave<span>Reel</span></a></div>
+    <h1 class="auth-title">Welcome back!</h1>
+    <p class="auth-subtitle">Sign in to discover & share amazing recipes</p>
+
+    <div class="demo-creds">
+      <strong>Demo Credentials</strong>
+      <div class="cred-row"><span>👑 Admin</span><button type="button" class="demo-btn" onclick="fillDemo('admin@recipereels.com','Admin@123')">Use Admin</button></div>
+      <div class="cred-row"><span>👨‍🍳 Chef Rahul</span><button type="button" class="demo-btn" onclick="fillDemo('chef.rahul@recipereels.com','Chef@123')">Use Chef</button></div>
+      <div class="cred-row"><span>🧑 Explorer Alex</span><button type="button" class="demo-btn" onclick="fillDemo('alex@example.com','User@123')">Use Explorer</button></div>
+    </div>
+
+    <div class="error-msg" id="errorMsg"></div>
+
+    <form id="loginForm" novalidate>
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" id="email" placeholder="you@example.com" required autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password" />
+      </div>
+      <button type="submit" class="btn-auth" id="loginBtn">Sign In</button>
+    </form>
+
+    <div class="divider"><hr /><span>or</span><hr /></div>
+    <div class="auth-footer">Don't have an account? <a href="register.html">Create one →</a></div>
+    <div class="auth-footer" style="margin-top:0.5rem;"><a href="index.html">← Back to home</a></div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    const existingToken = localStorage.getItem('rr_token');
+    if (existingToken) {
+      const storedUser = getStoredUser() || {};
+      redirectByRole(storedUser.role);
+    }
+
+    function redirectByRole(role) {
+      if (role === 'ROLE_ADMIN') {
+        window.location.replace('admin-dashboard.html');
+      } else if (role === 'ROLE_CONTRIBUTOR') {
+        window.location.replace('contributor-dashboard.html');
+      } else {
+        window.location.replace('explorer-dashboard.html');
+      }
+    }
+
+    function fillDemo(email, pass) {
+      document.getElementById('email').value = email;
+      document.getElementById('password').value = pass;
+    }
+
+    function showError(message) {
+      const errorEl = document.getElementById('errorMsg');
+      errorEl.textContent = message;
+      errorEl.style.display = 'block';
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const btn = document.getElementById('loginBtn');
+      const errorEl = document.getElementById('errorMsg');
+      errorEl.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Signing in…';
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await apiFetch('/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ email, password })
+        });
+
+        const result = response && response.data ? response.data : response;
+
+        if (!result || !result.token) {
+          throw new Error((response && response.message) || 'Login failed. Please check your credentials.');
+        }
+
+        setAuthToken(result.token);
+        setStoredUser({
+          id: result.id,
+          name: result.name,
+          email: result.email,
+          role: result.role,
+          avatarUrl: result.avatarUrl
+        });
+
+        redirectByRole(result.role);
+      } catch (error) {
+        console.error('Login failed:', error);
+        showError(error.message || 'Login failed. Please try again.');
+        btn.disabled = false;
+        btn.textContent = 'Sign In';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+target/
+.idea/
+*.iml
+*.log
+.vscode/
+.env
+application-local.properties
+uploads/*
+!uploads/.gitkeep

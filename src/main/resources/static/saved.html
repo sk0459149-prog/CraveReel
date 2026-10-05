@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saved Recipes – CraveReel</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .saved-hero {
+      background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 0 2rem;
+    }
+    .saved-hero h1 { font-size: 2rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.4rem; }
+    .saved-hero p { color: var(--text-muted); }
+    .collection-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .col-tab {
+      padding: 0.45rem 1rem; border-radius: 20px; border: 1px solid var(--border);
+      background: var(--bg-card); color: var(--text-secondary); cursor: pointer;
+      font-size: 0.85rem; font-weight: 600; transition: all 0.2s;
+    }
+    .col-tab.active, .col-tab:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem; }
+    .empty-state { text-align: center; padding: 4rem 1rem; color: var(--text-muted); }
+    .empty-state .empty-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    .empty-state h3 { color: var(--text-secondary); margin-bottom: 0.5rem; }
+    .empty-state a { color: var(--primary); }
+    .unsave-btn {
+      position: absolute; top: 0.6rem; right: 0.6rem;
+      background: rgba(0,0,0,0.7); border: none; border-radius: 50%;
+      width: 32px; height: 32px; cursor: pointer; color: #e74c3c;
+      display: flex; align-items: center; justify-content: center; font-size: 1rem;
+      z-index: 2;
+    }
+    .unsave-btn:hover { background: rgba(231,76,60,0.9); color: #fff; }
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;
+    }
+    .collection-name-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+      padding: 0.4rem 0.75rem; font-size: 0.82rem; color: var(--text-muted);
+    }
+    .saved-stats { display: flex; gap: 1.5rem; margin-top: 0.75rem; }
+    .saved-stat { text-align: center; }
+    .saved-stat .val { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
+    .saved-stat .lbl { font-size: 0.78rem; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">🍳 Crave<span>Reel</span></a>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="explore.html">Explore</a>
+        <a href="reels.html">Reels</a>
+        <a href="saved.html" class="active">Saved</a>
+      </div>
+      <div class="nav-actions" id="navActions">
+        <a href="login.html" class="btn-secondary">Login</a>
+        <a href="register.html" class="btn-primary">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="saved-hero">
+    <div class="container">
+      <h1>📌 Saved Recipes</h1>
+      <p>Your personal cookbook — organized by collection</p>
+      <div class="saved-stats">
+        <div class="saved-stat"><div class="val" id="totalSaved">0</div><div class="lbl">Total Saved</div></div>
+        <div class="saved-stat"><div class="val" id="totalCollections">0</div><div class="lbl">Collections</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTENT -->
+  <section class="section">
+    <div class="container">
+      <!-- Collection tabs -->
+      <div class="collection-tabs" id="collectionTabs">
+        <div class="col-tab active" data-col="all">All</div>
+      </div>
+
+      <!-- Loading -->
+      <div id="loadingState" style="text-align:center;padding:3rem;color:var(--text-muted);">
+        <div class="spinner" style="width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 1rem;"></div>
+        Loading your saved recipes…
+      </div>
+
+      <!-- Empty state -->
+      <div id="emptyState" class="empty-state" style="display:none;">
+        <div class="empty-icon">📭</div>
+        <h3>No saved recipes yet</h3>
+        <p>Start exploring and save recipes you love!</p>
+        <a href="explore.html" class="btn-primary" style="margin-top:1rem;display:inline-block;">Browse Recipes</a>
+      </div>
+
+      <!-- Recipe grid -->
+      <div class="recipe-grid" id="recipeGrid"></div>
+    </div>
+  </section>
+
+  <div id="toastContainer" style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;display:flex;flex-direction:column;gap:0.5rem;"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    let allSaved = [];
+    let currentCollection = 'all';
+
+    async function init() {
+      initAuthState();
+
+      const token = localStorage.getItem('rr_token');
+      if (!token) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      await loadSaved();
+    }
+
+    async function loadSaved() {
+      try {
+        const data = await apiFetch('/api/explorer/saved');
+        allSaved = data || [];
+
+        document.getElementById('totalSaved').textContent = allSaved.length;
+
+        // Build collections
+        const collections = ['all', ...new Set(allSaved.map(s => s.collectionName || 'General'))];
+        document.getElementById('totalCollections').textContent = collections.length - 1;
+        renderTabs(collections);
+
+        document.getElementById('loadingState').style.display = 'none';
+        renderGrid(currentCollection);
+      } catch (err) {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('emptyState').style.display = 'block';
+      }
+    }
+
+    function renderTabs(collections) {
+      const container = document.getElementById('collectionTabs');
+      container.innerHTML = collections.map(col => `
+        <div class="col-tab ${col === currentCollection ? 'active' : ''}" data-col="${col}">
+          ${col === 'all' ? '📋 All' : '📁 ' + col}
+        </div>
+      `).join('');
+
+      container.querySelectorAll('.col-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          currentCollection = tab.dataset.col;
+          container.querySelectorAll('.col-tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          renderGrid(currentCollection);
+        });
+      });
+    }
+
+    function renderGrid(collection) {
+      const grid = document.getElementById('recipeGrid');
+      const emptyState = document.getElementById('emptyState');
+
+      let filtered = allSaved;
+      if (collection !== 'all') {
+        filtered = allSaved.filter(s => (s.collectionName || 'General') === collection);
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+
+      grid.innerHTML = filtered.map(saved => {
+        const r = saved.recipe || saved;
+        const id = saved.recipeId || r.id;
+        const title = saved.recipeTitle || r.title || 'Untitled';
+        const image = saved.recipeImage || r.imageUrl || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80';
+        const category = saved.recipeCategory || r.category || '';
+        const time = r.cookingTimeMinutes ? formatDuration(r.cookingTimeMinutes) : '';
+        const col = saved.collectionName || 'General';
+
+        return `
+          <div class="recipe-card" style="position:relative;" data-id="${id}">
+            <button class="unsave-btn" onclick="unsave(${id}, this)" title="Remove from saved">🗑️</button>
+            <a href="recipe.html?id=${id}" style="text-decoration:none;">
+              <div class="recipe-card-image">
+                <img src="${image}" alt="${title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80'" />
+                ${category ? `<span class="recipe-badge">${category}</span>` : ''}
+              </div>
+              <div class="recipe-card-body">
+                <h3 class="recipe-card-title">${title}</h3>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:0.5rem;">
+                  <span class="collection-name-badge">📁 ${col}</span>
+                  ${time ? `<span style="font-size:0.8rem;color:var(--text-muted);">⏱ ${time}</span>` : ''}
+                </div>
+              </div>
+            </a>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function unsave(recipeId, btn) {
+      if (!confirm('Remove this recipe from your saved list?')) return;
+      try {
+        await apiFetch(`/api/recipes/${recipeId}/save`, { method: 'POST' });
+        showToast('Removed from saved recipes', 'success');
+        // Remove from local array and re-render
+        allSaved = allSaved.filter(s => (s.recipeId || s.recipe?.id) !== recipeId);
+        document.getElementById('totalSaved').textContent = allSaved.length;
+        renderGrid(currentCollection);
+      } catch (err) {
+        showToast('Failed to remove recipe', 'error');
+      }
+    }
+
+    init();
+  </script>
+  <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+</body>
+</html>

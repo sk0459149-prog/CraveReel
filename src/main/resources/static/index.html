@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CraveReel – Discover. Watch. Cook.</title>
+  <!-- Bootstrap 5 CSS & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <nav class="navbar navbar-expand-lg rr-navbar">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <div class="brand-icon"><i class="bi bi-play-circle-fill"></i></div>
+        <span>Crave<span class="brand-accent">Reel</span></span>
+      </a>
+
+      <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+        <i class="bi bi-list fs-2"></i>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 gap-1">
+          <li class="nav-item"><a class="nav-link active" href="index.html"><i class="bi bi-house-door"></i> Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="explore.html"><i class="bi bi-compass"></i> Explore</a></li>
+          <li class="nav-item"><a class="nav-link reels-badge-link" href="reels.html"><i class="bi bi-camera-reels-fill"></i> Reels</a></li>
+          <li class="nav-item"><a class="nav-link" href="saved.html"><i class="bi bi-bookmark-heart"></i> Saved</a></li>
+        </ul>
+
+        <!-- Search Bar -->
+        <form class="d-flex me-lg-3 my-2 my-lg-0 position-relative" onsubmit="event.preventDefault(); window.location.href='explore.html?query=' + encodeURIComponent(document.getElementById('navSearchInput').value);">
+          <input id="navSearchInput" class="form-control form-control-sm pe-5" type="search" placeholder="Search recipes, ingredients..." style="min-width: 220px; border-radius: var(--radius-full) !important;">
+          <button class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-muted pe-3" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
+        </form>
+
+        <!-- Auth Section -->
+        <div id="auth-nav-section" class="d-flex align-items-center"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="position-relative overflow-hidden py-5 my-3" style="background: radial-gradient(circle at 80% 20%, rgba(234, 88, 12, 0.15), transparent 50%), radial-gradient(circle at 20% 80%, rgba(245, 158, 11, 0.12), transparent 50%);">
+    <div class="container py-4">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7">
+          <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-3 rounded-pill" style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3);">
+            <i class="bi bi-fire text-warning"></i>
+            <span class="small fw-semibold text-warning">The Next-Gen Culinary Experience</span>
+          </div>
+          <h1 class="display-3 fw-extrabold text-white mb-3" style="letter-spacing: -1.5px; line-height: 1.15;">
+            Discover. Watch.<br><span class="brand-accent">Cook it.</span>
+          </h1>
+          <p class="lead text-secondary mb-4" style="max-width: 580px; font-size: 1.2rem;">
+            Discover Indian favourites, global comfort food and quick cooking reels—then follow crystal-clear step-by-step guides right in your kitchen.
+          </p>
+          <div class="d-flex flex-wrap gap-3">
+            <a href="reels.html" class="btn btn-rr-primary btn-lg px-4">
+              <i class="bi bi-play-fill fs-5"></i> Watch Reels
+            </a>
+            <a href="explore.html" class="btn btn-rr-secondary btn-lg px-4">
+              <i class="bi bi-search"></i> Explore Recipes
+            </a>
+          </div>
+          <!-- Quick Highlights -->
+          <div class="d-flex gap-4 mt-4 pt-3 border-top" style="border-color: var(--border-color) !important;">
+            <div>
+              <div class="fw-bold fs-4 text-white">60s</div>
+              <div class="small text-muted">Short Reels</div>
+            </div>
+            <div class="vr bg-secondary opacity-25"></div>
+            <div>
+              <div class="fw-bold fs-4 text-white">100%</div>
+              <div class="small text-muted">Step-by-Step</div>
+            </div>
+            <div class="vr bg-secondary opacity-25"></div>
+            <div>
+              <div class="fw-bold fs-4 text-white">🍳</div>
+              <div class="small text-muted">Hands-Free Mode</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-5 text-center">
+          <div class="position-relative d-inline-block">
+            <div class="reel-preview-card mx-auto shadow-lg" style="width: 280px; height: 490px; border-width: 2px;">
+              <video src="/assets/reels/paneerRecipe.mp4" autoplay loop muted playsinline></video>
+              <div class="reel-preview-overlay">
+                <div class="reel-preview-top">
+                  <span class="reel-play-chip"><i class="bi bi-camera-reels-fill text-warning"></i> Featured Reel</span>
+                  <span class="badge bg-dark bg-opacity-75"><i class="bi bi-eye"></i> 4.8K</span>
+                </div>
+                <div class="reel-preview-bottom text-start">
+                  <div class="reel-preview-title">Royal Kadhai Paneer Masala</div>
+                  <div class="reel-preview-author">
+                    <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=150" style="width: 22px; height: 22px; border-radius: 50%;">
+                    <span>by Chef Rahul Sharma</span>
+                  </div>
+                  <a href="reels.html" class="btn btn-sm btn-cook-this mt-2 py-1 px-3 w-100 justify-content-center">
+                    🍳 Cook This Reel
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Trending Cooking Reels Section -->
+  <section class="py-5" style="border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); background: rgba(0, 0, 0, 0.2);">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+          <span class="badge bg-warning bg-opacity-10 text-warning px-3 py-1 rounded-pill mb-2 fw-semibold">
+            <i class="bi bi-camera-reels-fill me-1"></i> Vertical Video Feed
+          </span>
+          <h2 class="fw-extrabold text-white mb-1">Trending Cooking Reels</h2>
+          <p class="text-secondary small mb-0">Watch quick recipe previews and jump straight into cooking mode.</p>
+        </div>
+        <a href="reels.html" class="btn btn-sm btn-rr-secondary">
+          View All Reels <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Reels Carousel / Row -->
+      <div id="trendingReelsContainer" class="d-flex gap-3 overflow-x-auto pb-3 pt-2" style="scrollbar-width: thin;">
+        <!-- Dynamically Populated by main.js -->
+        <div class="text-center py-5 w-100 text-muted">
+          <div class="spinner-border text-warning spinner-border-sm" role="status"></div> Loading reels...
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Category Filter Chips -->
+  <section class="py-4">
+    <div class="container">
+      <div class="d-flex gap-2 overflow-x-auto pb-2" id="homeCategoriesList" style="scrollbar-width: none;">
+        <div class="category-chip active" onclick="filterByCategory('')">
+          <span>✨</span> All Categories
+        </div>
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Indian Kitchen Spotlight -->
+  <section class="indian-spotlight py-5">
+    <div class="container">
+      <div class="spotlight-heading d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+        <div>
+          <span class="section-eyebrow"><i class="bi bi-stars"></i> Indian Kitchen</span>
+          <h2 class="fw-extrabold text-white mb-1">Royal Indian Favourites</h2>
+          <p class="text-secondary mb-0">Bold masalas, comforting classics and recipes made for your kitchen.</p>
+        </div>
+        <a href="explore.html?query=Indian" class="btn btn-rr-secondary">
+          Explore Indian Recipes <i class="bi bi-arrow-up-right"></i>
+        </a>
+      </div>
+      <div class="row g-4" id="indianRecipesContainer">
+        <div class="col-12 text-center py-4 text-muted">
+          <div class="spinner-border text-warning spinner-border-sm" role="status"></div>
+          Loading Indian favourites...
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trending Recipes Grid -->
+  <section class="py-5">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+          <span class="badge bg-danger bg-opacity-10 text-danger px-3 py-1 rounded-pill mb-2 fw-semibold">
+            <i class="bi bi-fire me-1"></i> Highly Popular
+          </span>
+          <h2 class="fw-extrabold text-white mb-1">Top Rated & Trending Recipes</h2>
+          <p class="text-secondary small mb-0">Tested, reviewed, and loved by thousands of home chefs.</p>
+        </div>
+        <a href="explore.html?sort=popular" class="btn btn-sm btn-rr-secondary">
+          Explore All <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="row g-4" id="trendingRecipesContainer">
+        <!-- Dynamically Populated -->
+        <div class="col-12 text-center py-5 text-muted">
+          <div class="spinner-border text-warning spinner-border-sm" role="status"></div> Loading delicious recipes...
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- "How CraveReel Works" Section -->
+  <section class="py-5 my-4" style="background: linear-gradient(180deg, var(--bg-card), var(--bg-primary)); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+    <div class="container py-3">
+      <div class="text-center max-w-700 mx-auto mb-5">
+        <span class="badge bg-success bg-opacity-10 text-success px-3 py-1 rounded-pill mb-2 fw-semibold">The CraveReel Journey</span>
+        <h2 class="display-6 fw-extrabold text-white mb-2">How CraveReel Works</h2>
+        <p class="text-secondary">From craving to plate in four joyful, effortless steps.</p>
+      </div>
+
+      <div class="row g-4 text-center">
+        <div class="col-md-3">
+          <div class="p-4 rounded-4" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color);">
+            <div class="brand-icon mx-auto mb-3" style="width: 54px; height: 54px; font-size: 1.5rem;">
+              <i class="bi bi-play-circle"></i>
+            </div>
+            <h5 class="fw-bold text-white mb-2">1. Watch Reel</h5>
+            <p class="text-secondary small mb-0">Scroll through appetizing 60-second cooking clips and discover new dishes.</p>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="p-4 rounded-4" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color);">
+            <div class="brand-icon mx-auto mb-3" style="width: 54px; height: 54px; font-size: 1.5rem; background: linear-gradient(135deg, #10b981, #059669);">
+              <i class="bi bi-egg-fried"></i>
+            </div>
+            <h5 class="fw-bold text-white mb-2">2. Click "Cook This"</h5>
+            <p class="text-secondary small mb-0">Love what you see? Tap "Cook This" to immediately open the complete recipe guide.</p>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="p-4 rounded-4" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color);">
+            <div class="brand-icon mx-auto mb-3" style="width: 54px; height: 54px; font-size: 1.5rem; background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+              <i class="bi bi-card-checklist"></i>
+            </div>
+            <h5 class="fw-bold text-white mb-2">3. Prep Ingredients</h5>
+            <p class="text-secondary small mb-0">Tick off measured dynamic ingredients from your pantry with one click.</p>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="p-4 rounded-4" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color);">
+            <div class="brand-icon mx-auto mb-3" style="width: 54px; height: 54px; font-size: 1.5rem; background: linear-gradient(135deg, #f43f5e, #be123c);">
+              <i class="bi bi-stopwatch"></i>
+            </div>
+            <h5 class="fw-bold text-white mb-2">4. Cooking Mode</h5>
+            <p class="text-secondary small mb-0">Follow distraction-free step-by-step instructions with integrated kitchen timers.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick 20-30 min Recipes -->
+  <section class="py-5">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+          <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-pill mb-2 fw-semibold">
+            <i class="bi bi-lightning-charge me-1"></i> Weeknight Heroes
+          </span>
+          <h2 class="fw-extrabold text-white mb-1">Quick & Easy Recipes (&le; 30 mins)</h2>
+          <p class="text-secondary small mb-0">Minimal prep, maximum flavor for busy evenings.</p>
+        </div>
+        <a href="explore.html?maxCookTime=30" class="btn btn-sm btn-rr-secondary">
+          View All Quick <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="row g-4" id="quickRecipesContainer">
+        <!-- Dynamically Populated -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="rr-footer">
+    <div class="container">
+      <div class="row g-4 mb-4">
+        <div class="col-lg-4">
+          <a class="navbar-brand mb-3 d-inline-flex" href="index.html">
+            <div class="brand-icon"><i class="bi bi-play-circle-fill"></i></div>
+            <span>Crave<span class="brand-accent">Reel</span></span>
+          </a>
+          <p class="text-muted small pe-lg-4">
+            CraveReel is the modern full-stack culinary destination combining short vertical cooking reels with interactive recipe guides and distraction-free cooking assistants.
+          </p>
+          <div class="d-flex gap-3 text-secondary fs-5">
+            <a href="#" class="text-muted"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="text-muted"><i class="bi bi-youtube"></i></a>
+            <a href="#" class="text-muted"><i class="bi bi-tiktok"></i></a>
+            <a href="#" class="text-muted"><i class="bi bi-github"></i></a>
+          </div>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5>Platform</h5>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="reels.html">Cooking Reels</a></li>
+            <li><a href="explore.html">Explore Recipes</a></li>
+            <li><a href="saved.html">Saved Collection</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5>Community</h5>
+          <ul>
+            <li><a href="register.html">Become a Chef</a></li>
+            <li><a href="contributor-dashboard.html">Creator Dashboard</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="admin-dashboard.html">Admin Portal</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4">
+          <h5>Stay Inspired</h5>
+          <p class="small text-muted">Join thousands of home chefs receiving daily recipe reels and cooking inspiration.</p>
+          <div class="input-group">
+            <input type="email" class="form-control" placeholder="Enter your email">
+            <button class="btn btn-rr-primary" type="button" onclick="showToast('Subscribed to culinary newsletter!', 'success')">Subscribe</button>
+          </div>
+        </div>
+      </div>
+      <div class="pt-4 border-top border-secondary border-opacity-10 d-flex flex-wrap justify-content-between align-items-center small text-muted">
+        <div>&copy; 2026 CraveReel Inc. All rights reserved. Built with Java 21 &amp; Spring Boot.</div>
+        <div>
+          <a href="#" class="text-muted me-3">Privacy Policy</a>
+          <a href="#" class="text-muted">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile Bottom Navigation -->
+  <div class="mobile-bottom-nav">
+    <a href="index.html" class="mobile-nav-item active"><i class="bi bi-house-door-fill"></i><span>Home</span></a>
+    <a href="explore.html" class="mobile-nav-item"><i class="bi bi-compass"></i><span>Explore</span></a>
+    <a href="reels.html" class="mobile-nav-item text-warning"><i class="bi bi-camera-reels-fill"></i><span>Reels</span></a>
+    <a href="saved.html" class="mobile-nav-item"><i class="bi bi-bookmark-heart"></i><span>Saved</span></a>
+    <a href="login.html" class="mobile-nav-item"><i class="bi bi-person-circle"></i><span>Profile</span></a>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- App Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
